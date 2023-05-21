@@ -7,4 +7,7 @@ object Constants {
 
     // data
     const val API_HOST_URL = "https://api.open-meteo.com"
+
+    // delay
+    const val DELAY_LOCATION_SERVICE_UPDATES = 10000L
 }

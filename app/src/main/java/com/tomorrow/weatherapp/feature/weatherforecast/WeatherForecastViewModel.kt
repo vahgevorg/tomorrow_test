@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.tomorrow.weatherapp.core.extensions.flowOnBackground
 import com.tomorrow.weatherapp.core.extensions.flowOnUIImmediate
 import com.tomorrow.weatherapp.domain.interactors.GetWeatherForecastUseCase
+import com.tomorrow.weatherapp.domain.model.LocationDomainModel
 import com.tomorrow.weatherapp.domain.model.WeatherForecastDomainModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -28,6 +29,10 @@ class WeatherForecastViewModel(
     }
 
     private fun onWeatherForecastDataCollect(data: WeatherForecastDomainModel?) {
+        // NO-OP
+    }
+
+    fun onLocationUpdateReceived(locationDomainModel: LocationDomainModel) {
         // NO-OP
     }
 }

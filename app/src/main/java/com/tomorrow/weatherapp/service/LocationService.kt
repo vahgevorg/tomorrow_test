@@ -9,8 +9,32 @@ import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
 import com.tomorrow.weatherapp.R
+import com.tomorrow.weatherapp.core.common.Constants.DELAY_LOCATION_SERVICE_UPDATES
+import com.tomorrow.weatherapp.core.common.Locations.locations
+import com.tomorrow.weatherapp.domain.model.LocationDomainModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 class LocationService : Service() {
+
+    private val locationFlow = MutableSharedFlow<LocationDomainModel>(replay = 1)
+    private lateinit var locationUpdatesJob: Job
+
+    override fun onCreate() {
+        super.onCreate()
+        locationUpdatesJob = startLocationUpdates()
+    }
+
+    private fun startLocationUpdates(): Job = CoroutineScope(Dispatchers.IO).launch {
+        var currentIndex = 0
+        while (isActive) {
+            val currentLocation = locations[currentIndex]
+            locationFlow.emit(currentLocation)
+            currentIndex = (currentIndex + 1) % locations.size
+            delay(DELAY_LOCATION_SERVICE_UPDATES)
+        }
+    }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForegroundService()
@@ -19,6 +43,15 @@ class LocationService : Service() {
 
     override fun onBind(intent: Intent): IBinder {
         return LocationBinder()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopLocationUpdates()
+    }
+
+    private fun stopLocationUpdates() {
+        locationUpdatesJob.cancel()
     }
 
     private fun startForegroundService() {
@@ -40,6 +73,11 @@ class LocationService : Service() {
 
         // Start the service in the foreground with the notification
         startForeground(1, notification)
+    }
+
+    // Public method to allow other components to subscribe to location updates
+    fun getLocationUpdates(): Flow<LocationDomainModel> {
+        return locationFlow
     }
 
     inner class LocationBinder : Binder() {

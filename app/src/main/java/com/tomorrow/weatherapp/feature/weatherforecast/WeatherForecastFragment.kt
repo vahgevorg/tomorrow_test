@@ -9,16 +9,21 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.tomorrow.weatherapp.core.extensions.viewBinding
 import com.tomorrow.weatherapp.databinding.FragmentWeatherForecastBinding
 import com.tomorrow.weatherapp.feature.base.BaseFragment
 import com.tomorrow.weatherapp.service.LocationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
 class WeatherForecastFragment : BaseFragment() {
 
+    private var locationUpdatesJob: Job? = null
     private var locationService: LocationService? = null
     private var isServiceBound = false
 
@@ -32,6 +37,11 @@ class WeatherForecastFragment : BaseFragment() {
             val binder = service as LocationService.LocationBinder
             locationService = binder.getService()
             isServiceBound = true
+
+            // Subscribe to location updates
+            locationService?.getLocationUpdates()?.onEach { location ->
+                weatherForecastViewModel.onLocationUpdateReceived(location)
+            }?.launchIn(lifecycleScope)
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
@@ -75,5 +85,7 @@ class WeatherForecastFragment : BaseFragment() {
         }
         // Stop the location service
         requireActivity().stopService(locationServiceIntent)
+        // Cancel location updates job
+        locationUpdatesJob?.cancel()
     }
 }
