@@ -1,9 +1,11 @@
 package com.tomorrow.weatherapp.feature.weatherforecast
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.tomorrow.weatherapp.core.extensions.flowOnBackground
 import com.tomorrow.weatherapp.core.extensions.flowOnUIImmediate
+import com.tomorrow.weatherapp.core.livedata.asImmutable
 import com.tomorrow.weatherapp.domain.interactors.GetWeatherForecastUseCase
 import com.tomorrow.weatherapp.domain.model.LocationDomainModel
 import com.tomorrow.weatherapp.domain.model.WeatherForecastDomainModel
@@ -16,6 +18,9 @@ import kotlinx.coroutines.flow.onEach
 class WeatherForecastViewModel(
     private val getWeatherForecastUseCase: GetWeatherForecastUseCase,
 ) : ViewModel() {
+
+    private val _locationData = MutableLiveData<LocationDomainModel>()
+    val locationData = _locationData.asImmutable()
 
     private fun collectWeatherForecast(latitude: Double, longitude: Double) {
         getWeatherForecastUseCase.execute(GetWeatherForecastUseCase.Params(latitude, longitude))
@@ -33,6 +38,6 @@ class WeatherForecastViewModel(
     }
 
     fun onLocationUpdateReceived(locationDomainModel: LocationDomainModel) {
-        // NO-OP
+        _locationData.postValue(locationDomainModel)
     }
 }

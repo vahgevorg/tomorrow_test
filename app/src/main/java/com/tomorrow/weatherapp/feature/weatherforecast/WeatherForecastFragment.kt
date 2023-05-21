@@ -10,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import com.tomorrow.weatherapp.R
 import com.tomorrow.weatherapp.core.extensions.viewBinding
 import com.tomorrow.weatherapp.databinding.FragmentWeatherForecastBinding
+import com.tomorrow.weatherapp.domain.model.LocationDomainModel
 import com.tomorrow.weatherapp.feature.base.BaseFragment
 import com.tomorrow.weatherapp.service.LocationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -67,7 +69,9 @@ class WeatherForecastFragment : BaseFragment() {
     ): View = binding.root
 
     override fun observeViewModelValues() {
-        // NO-OP
+        weatherForecastViewModel.apply {
+            locationData.observe(viewLifecycleOwner, ::onLocationData)
+        }
     }
 
     private fun startAndBindService() {
@@ -87,5 +91,10 @@ class WeatherForecastFragment : BaseFragment() {
         requireActivity().stopService(locationServiceIntent)
         // Cancel location updates job
         locationUpdatesJob?.cancel()
+    }
+
+    private fun onLocationData(locationDomainModel: LocationDomainModel?) {
+        locationDomainModel ?: return
+        binding.tvLocationValue.text = getString(R.string.weather_forecast_location_placeholder, locationDomainModel.latitude, locationDomainModel.longitude)
     }
 }

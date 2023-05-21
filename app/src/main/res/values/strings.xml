@@ -6,5 +6,8 @@
 
     <!-- weather forecast -->
     <string name="weather_forecast_screen_title">Weather Forecast Screen</string>
+    <string name="weather_forecast_title">Weather</string>
+    <string name="weather_forecast_location_subtitle">Current Location</string>
+    <string name="weather_forecast_location_placeholder">%1$f, %2$f</string>
 
 </resources>
