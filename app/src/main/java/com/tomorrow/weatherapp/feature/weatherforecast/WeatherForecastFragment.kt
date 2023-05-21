@@ -21,7 +21,6 @@ import com.tomorrow.weatherapp.feature.base.BaseFragment
 import com.tomorrow.weatherapp.feature.weatherforecast.adapter.WeatherForecastAdapter
 import com.tomorrow.weatherapp.service.LocationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,7 +29,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class WeatherForecastFragment : BaseFragment() {
 
     private lateinit var weatherForecastAdapter: WeatherForecastAdapter
-    private var locationUpdatesJob: Job? = null
     private var locationService: LocationService? = null
     private var isServiceBound = false
 
@@ -100,8 +98,6 @@ class WeatherForecastFragment : BaseFragment() {
         }
         // Stop the location service
         requireActivity().stopService(locationServiceIntent)
-        // Cancel location updates job
-        locationUpdatesJob?.cancel()
     }
 
     private fun onLocationData(locationDomainModel: LocationDomainModel?) {
