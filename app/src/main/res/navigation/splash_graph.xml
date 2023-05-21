@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/splash_graph"
+    app:startDestination="@id/fragment_splash"
+    tools:ignore="UnusedNavigation">
+
+    <fragment
+        android:id="@+id/fragment_splash"
+        android:name="com.tomorrow.weatherapp.feature.splash.SplashFragment"
+        android:label="@string/splash_screen_title"
+        tools:layout="@layout/fragment_splash" />
+
+</navigation>
