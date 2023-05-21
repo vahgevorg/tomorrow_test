@@ -26,6 +26,9 @@ class WeatherForecastViewModel(
     private val _viewEffect = SingleLiveEvent<WeatherForecastViewEffect>()
     val viewEffect = _viewEffect.asImmutable()
 
+    private val _weatherForecast = MutableLiveData<WeatherForecastDomainModel>()
+    val weatherForecast = _weatherForecast.asImmutable()
+
     private fun collectWeatherForecast(latitude: Double, longitude: Double) {
         getWeatherForecastUseCase.execute(GetWeatherForecastUseCase.Params(latitude, longitude))
             .flowOnBackground()
@@ -38,11 +41,17 @@ class WeatherForecastViewModel(
     }
 
     private fun onWeatherForecastDataCollect(data: WeatherForecastDomainModel?) {
-        // NO-OP
+        _viewEffect.value = WeatherForecastViewEffect.HideLoading
+        data?.let {
+            _weatherForecast.postValue(it)
+        } ?: run {
+           // NO-OP
+        }
     }
 
     fun onLocationUpdateReceived(locationDomainModel: LocationDomainModel) {
         _locationData.postValue(locationDomainModel)
         _viewEffect.postValue(WeatherForecastViewEffect.ShowLoading)
+        collectWeatherForecast(locationDomainModel.latitude, locationDomainModel.longitude)
     }
 }

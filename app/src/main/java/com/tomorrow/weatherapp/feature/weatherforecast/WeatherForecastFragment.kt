@@ -15,6 +15,7 @@ import com.tomorrow.weatherapp.R
 import com.tomorrow.weatherapp.core.extensions.viewBinding
 import com.tomorrow.weatherapp.databinding.FragmentWeatherForecastBinding
 import com.tomorrow.weatherapp.domain.model.LocationDomainModel
+import com.tomorrow.weatherapp.domain.model.WeatherForecastDomainModel
 import com.tomorrow.weatherapp.feature.base.BaseFragment
 import com.tomorrow.weatherapp.service.LocationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -73,6 +74,7 @@ class WeatherForecastFragment : BaseFragment() {
         weatherForecastViewModel.apply {
             locationData.observe(viewLifecycleOwner, ::onLocationData)
             viewEffect.observe(viewLifecycleOwner, ::onViewEffect)
+            weatherForecast.observe(viewLifecycleOwner, ::onWeatherForecast)
         }
     }
 
@@ -115,5 +117,13 @@ class WeatherForecastFragment : BaseFragment() {
 
     private fun applyHideLoadingState() {
         binding.layoutLoading.globalLoadingContainer.isVisible = false
+    }
+
+    private fun onWeatherForecast(weatherForecastDomainModel: WeatherForecastDomainModel?) {
+        weatherForecastDomainModel ?: return
+        binding.apply {
+            tvWeatherForecastSubTitle.isVisible = true
+            // TODO: create adapter and submit list here
+        }
     }
 }
