@@ -55,9 +55,17 @@ class GetWeatherForecastUseCaseTest {
         val locationDomainModel = LocationDomainModel(52.520008, 13.404954)
 
         // Execute the use case
-        useCase.execute(GetWeatherForecastUseCase.Params(locationDomainModel.latitude, locationDomainModel.longitude))
+        useCase.execute(
+            GetWeatherForecastUseCase.Params(
+                locationDomainModel.latitude,
+                locationDomainModel.longitude
+            )
+        )
 
         // Verify that the `getWeatherForecast` method on the repository was called with the correct parameters
-        verify(weatherRepository).getWeatherForecast(locationDomainModel.latitude, locationDomainModel.longitude)
+        verify(weatherRepository).getWeatherForecast(
+            locationDomainModel.latitude,
+            locationDomainModel.longitude
+        )
     }
 }
