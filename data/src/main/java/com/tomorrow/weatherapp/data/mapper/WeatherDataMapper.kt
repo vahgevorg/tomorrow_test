@@ -11,17 +11,28 @@ object WeatherDataMapper {
 
     val weatherApiDtoToDomainModel = object :
         Mapper<WeatherApiDto, WeatherForecastDomainModel> {
-        override fun map(from: WeatherApiDto): WeatherForecastDomainModel = WeatherForecastDomainModel(
-            weatherUnits = from.hourlyWeatherUnits?.let { hourlyWeatherUnitsApiDtoToDomainModel.map(it) } ?: HourlyWeatherUnitsDomainModel("", ""),
-            weatherForecast = from.hourlyWeather?.let { it.time?.zip(it.temperature2m ?: emptyList()) { time, temperature -> HourlyWeatherDomainModel(time, temperature) } ?: emptyList() } ?: emptyList(),
-        )
+        override fun map(from: WeatherApiDto): WeatherForecastDomainModel =
+            WeatherForecastDomainModel(
+                weatherUnits = from.hourlyWeatherUnits?.let {
+                    hourlyWeatherUnitsApiDtoToDomainModel.map(
+                        it
+                    )
+                } ?: HourlyWeatherUnitsDomainModel("", ""),
+                weatherForecast = from.hourlyWeather?.let {
+                    it.time?.zip(
+                        it.temperature2m ?: emptyList()
+                    ) { time, temperature -> HourlyWeatherDomainModel(time, temperature) }
+                        ?: emptyList()
+                } ?: emptyList(),
+            )
     }
 
     val hourlyWeatherUnitsApiDtoToDomainModel = object :
         Mapper<HourlyWeatherUnitsApiDto, HourlyWeatherUnitsDomainModel> {
-        override fun map(from: HourlyWeatherUnitsApiDto): HourlyWeatherUnitsDomainModel = HourlyWeatherUnitsDomainModel(
-            time = from.time.orEmpty(),
-            temperature2m = from.temperature2m.orEmpty(),
-        )
+        override fun map(from: HourlyWeatherUnitsApiDto): HourlyWeatherUnitsDomainModel =
+            HourlyWeatherUnitsDomainModel(
+                time = from.time.orEmpty(),
+                temperature2m = from.temperature2m.orEmpty(),
+            )
     }
 }
