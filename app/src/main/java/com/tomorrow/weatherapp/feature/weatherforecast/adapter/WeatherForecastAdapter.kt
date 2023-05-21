@@ -39,7 +39,11 @@ class WeatherForecastAdapter(
                 // temperature
                 val temperatureFormatted = String.format("%.1f", data.temperature2m)
                 tvTemperature.apply {
-                    text = context.getString(R.string.weather_forecast_temperature_placeholder, temperatureFormatted, hourlyWeatherUnitsDomainModel.temperature2m)
+                    text = context.getString(
+                        R.string.weather_forecast_temperature_placeholder,
+                        temperatureFormatted,
+                        hourlyWeatherUnitsDomainModel.temperature2m
+                    )
                 }
             }
         }
@@ -47,11 +51,17 @@ class WeatherForecastAdapter(
 }
 
 object DiffUtilCallback : DiffUtil.ItemCallback<HourlyWeatherDomainModel>() {
-    override fun areItemsTheSame(oldItem: HourlyWeatherDomainModel, newItem: HourlyWeatherDomainModel): Boolean {
+    override fun areItemsTheSame(
+        oldItem: HourlyWeatherDomainModel,
+        newItem: HourlyWeatherDomainModel
+    ): Boolean {
         return oldItem.time == newItem.time
     }
 
-    override fun areContentsTheSame(oldItem: HourlyWeatherDomainModel, newItem: HourlyWeatherDomainModel): Boolean {
+    override fun areContentsTheSame(
+        oldItem: HourlyWeatherDomainModel,
+        newItem: HourlyWeatherDomainModel
+    ): Boolean {
         return oldItem == newItem
     }
 }

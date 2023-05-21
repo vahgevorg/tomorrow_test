@@ -8,11 +8,11 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="@dimen/splash_icon_size"
         android:layout_height="@dimen/splash_icon_size"
+        android:tint="@color/purple_500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:tint="@color/purple_500"
         app:srcCompat="@drawable/ic_baseline_cloud_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

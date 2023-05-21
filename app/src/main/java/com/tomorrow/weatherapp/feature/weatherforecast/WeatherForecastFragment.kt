@@ -85,7 +85,11 @@ class WeatherForecastFragment : BaseFragment() {
         // Start the location service
         requireActivity().startService(locationServiceIntent)
         // Bind to the location service
-        requireActivity().bindService(locationServiceIntent, serviceConnection, Context.BIND_AUTO_CREATE)
+        requireActivity().bindService(
+            locationServiceIntent,
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     private fun stopAndUnBindService() {
@@ -102,7 +106,11 @@ class WeatherForecastFragment : BaseFragment() {
 
     private fun onLocationData(locationDomainModel: LocationDomainModel?) {
         locationDomainModel ?: return
-        binding.tvLocationValue.text = getString(R.string.weather_forecast_location_placeholder, locationDomainModel.latitude, locationDomainModel.longitude)
+        binding.tvLocationValue.text = getString(
+            R.string.weather_forecast_location_placeholder,
+            locationDomainModel.latitude,
+            locationDomainModel.longitude
+        )
     }
 
     private fun onViewEffect(viewEffect: WeatherForecastViewEffect?) {

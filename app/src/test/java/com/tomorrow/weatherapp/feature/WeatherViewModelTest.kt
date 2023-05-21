@@ -14,7 +14,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -53,68 +56,72 @@ class WeatherViewModelTest {
     }
 
     @Test
-    fun `onLocationUpdateReceived should update locationData and trigger data collection`() = runTest {
-        // Initialize view model
-        initViewModel()
+    fun `onLocationUpdateReceived should update locationData and trigger data collection`() =
+        runTest {
+            // Initialize view model
+            initViewModel()
 
-        // Create a mock Observer to listen to the viewEffect LiveData
-        val observer = mock(Observer::class.java) as Observer<WeatherForecastViewEffect>
-        viewModel.viewEffect.observeForever(observer)
+            // Create a mock Observer to listen to the viewEffect LiveData
+            val observer = mock(Observer::class.java) as Observer<WeatherForecastViewEffect>
+            viewModel.viewEffect.observeForever(observer)
 
-        // Mock the weather forecast and location
-        val locationDomainModel = LocationDomainModel(52.520008, 13.404954)
-        val weatherForecastDomainModel = WeatherForecastDomainModel(
-            weatherUnits = HourlyWeatherUnitsDomainModel(
-                "iso8601", "°C"
-            ),
-            weatherForecast = listOf(
-                HourlyWeatherDomainModel(
-                    "2023-05-20T00:00", 11.1
+            // Mock the weather forecast and location
+            val locationDomainModel = LocationDomainModel(52.520008, 13.404954)
+            val weatherForecastDomainModel = WeatherForecastDomainModel(
+                weatherUnits = HourlyWeatherUnitsDomainModel(
+                    "iso8601", "°C"
+                ),
+                weatherForecast = listOf(
+                    HourlyWeatherDomainModel(
+                        "2023-05-20T00:00", 11.1
+                    )
                 )
             )
-        )
 
-        // Mock the weather forecast response from the use case
-        whenever(getWeatherForecastUseCase.execute(any())) doReturn flowOf(weatherForecastDomainModel)
+            // Mock the weather forecast response from the use case
+            whenever(getWeatherForecastUseCase.execute(any())) doReturn flowOf(
+                weatherForecastDomainModel
+            )
 
-        // Call the onLocationUpdateReceived function
-        viewModel.onLocationUpdateReceived(locationDomainModel)
+            // Call the onLocationUpdateReceived function
+            viewModel.onLocationUpdateReceived(locationDomainModel)
 
-        // Verify the view model location values
-        assertThat(viewModel.locationData.value).isEqualTo(locationDomainModel)
+            // Verify the view model location values
+            assertThat(viewModel.locationData.value).isEqualTo(locationDomainModel)
 
-        // Verify the view model weather forecast values
-        assertThat(viewModel.weatherForecast.value).isEqualTo(weatherForecastDomainModel)
+            // Verify the view model weather forecast values
+            assertThat(viewModel.weatherForecast.value).isEqualTo(weatherForecastDomainModel)
 
-        // Cleanup the observer
-        viewModel.viewEffect.removeObserver(observer)
-    }
+            // Cleanup the observer
+            viewModel.viewEffect.removeObserver(observer)
+        }
 
     @Test
-    fun `onLocationUpdateReceived should show generic error when data collection fails`() = runTest {
-        // Initialize view model
-        initViewModel()
+    fun `onLocationUpdateReceived should show generic error when data collection fails`() =
+        runTest {
+            // Initialize view model
+            initViewModel()
 
-        // Create a mock Observer to listen to the viewEffect LiveData
-        val observer = mock(Observer::class.java) as Observer<WeatherForecastViewEffect>
-        viewModel.viewEffect.observeForever(observer)
+            // Create a mock Observer to listen to the viewEffect LiveData
+            val observer = mock(Observer::class.java) as Observer<WeatherForecastViewEffect>
+            viewModel.viewEffect.observeForever(observer)
 
-        // Mock the location
-        val locationDomainModel = LocationDomainModel(52.520008, 13.404954)
+            // Mock the location
+            val locationDomainModel = LocationDomainModel(52.520008, 13.404954)
 
-        // Mock the weather forecast response from the use case, throw exception
-        whenever(getWeatherForecastUseCase.execute(any())) doReturn flow { throw Exception() }
+            // Mock the weather forecast response from the use case, throw exception
+            whenever(getWeatherForecastUseCase.execute(any())) doReturn flow { throw Exception() }
 
-        // Call the onLocationUpdateReceived function
-        viewModel.onLocationUpdateReceived(locationDomainModel)
+            // Call the onLocationUpdateReceived function
+            viewModel.onLocationUpdateReceived(locationDomainModel)
 
-        // Verify that the viewEffect LiveData emitted the expected values
-        verify(observer, times(1)).onChanged(WeatherForecastViewEffect.ShowLoading)
-        verify(observer, times(1)).onChanged(WeatherForecastViewEffect.GenericError)
+            // Verify that the viewEffect LiveData emitted the expected values
+            verify(observer, times(1)).onChanged(WeatherForecastViewEffect.ShowLoading)
+            verify(observer, times(1)).onChanged(WeatherForecastViewEffect.GenericError)
 
-        // Cleanup the observer
-        viewModel.viewEffect.removeObserver(observer)
-    }
+            // Cleanup the observer
+            viewModel.viewEffect.removeObserver(observer)
+        }
 
     private fun initViewModel() {
         viewModel = WeatherForecastViewModel(getWeatherForecastUseCase)
