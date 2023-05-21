@@ -18,7 +18,7 @@ class SplashViewModel : ViewModel() {
     fun onViewModelReady() {
         viewModelScope.launch {
             delay(DEFAULT_SPLASH_TIMEOUT)
-            _navigation.postValue(SplashRoutableScreen.WeatherScreen)
+            _navigation.postValue(SplashRoutableScreen.WeatherForecastScreen)
         }
     }
 }

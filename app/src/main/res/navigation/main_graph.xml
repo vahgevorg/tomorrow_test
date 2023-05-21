@@ -6,4 +6,13 @@
 
     <include app:graph="@navigation/splash_graph" />
 
+    <include app:graph="@navigation/weather_forecast_graph" />
+
+    <action
+        android:id="@+id/actionToWeatherForecastGraph"
+        app:destination="@id/weather_forecast_graph"
+        app:launchSingleTop="true"
+        app:popUpTo="@navigation/weather_forecast_graph"
+        app:popUpToInclusive="true" />
+
 </navigation>

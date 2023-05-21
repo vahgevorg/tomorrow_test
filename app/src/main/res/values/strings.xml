@@ -3,4 +3,8 @@
 
     <!-- splash -->
     <string name="splash_screen_title">Splash Screen</string>
+
+    <!-- weather forecast -->
+    <string name="weather_forecast_screen_title">Weather Forecast Screen</string>
+
 </resources>

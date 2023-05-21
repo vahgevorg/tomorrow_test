@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.tomorrow.weatherapp.MainGraphDirections
+import com.tomorrow.weatherapp.R
+import com.tomorrow.weatherapp.core.extensions.navigate
 import com.tomorrow.weatherapp.core.extensions.viewBinding
 import com.tomorrow.weatherapp.databinding.FragmentSplashBinding
 import com.tomorrow.weatherapp.feature.base.BaseFragment
@@ -31,13 +34,15 @@ class SplashFragment : BaseFragment() {
 
     private fun onNavigation(screen: SplashRoutableScreen) {
         when (screen) {
-            SplashRoutableScreen.WeatherScreen -> {
-                navigateToWeatherScreen()
+            SplashRoutableScreen.WeatherForecastScreen -> {
+                navigateToWeatherForecastScreen()
             }
         }
     }
 
-    private fun navigateToWeatherScreen() {
-        // NO-OP
+    private fun navigateToWeatherForecastScreen() {
+        MainGraphDirections.actionToWeatherForecastGraph().apply {
+            navigate(R.id.nav_host_fragment, this)
+        }
     }
 }
