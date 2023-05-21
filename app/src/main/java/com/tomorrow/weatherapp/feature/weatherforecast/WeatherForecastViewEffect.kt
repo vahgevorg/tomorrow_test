@@ -1,5 +1,6 @@
 package com.tomorrow.weatherapp.feature.weatherforecast
 
 sealed class WeatherForecastViewEffect {
-    // NO-OP
+    object ShowLoading : WeatherForecastViewEffect()
+    object HideLoading : WeatherForecastViewEffect()
 }

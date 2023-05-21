@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.tomorrow.weatherapp.R
 import com.tomorrow.weatherapp.core.extensions.viewBinding
@@ -71,6 +72,7 @@ class WeatherForecastFragment : BaseFragment() {
     override fun observeViewModelValues() {
         weatherForecastViewModel.apply {
             locationData.observe(viewLifecycleOwner, ::onLocationData)
+            viewEffect.observe(viewLifecycleOwner, ::onViewEffect)
         }
     }
 
@@ -96,5 +98,22 @@ class WeatherForecastFragment : BaseFragment() {
     private fun onLocationData(locationDomainModel: LocationDomainModel?) {
         locationDomainModel ?: return
         binding.tvLocationValue.text = getString(R.string.weather_forecast_location_placeholder, locationDomainModel.latitude, locationDomainModel.longitude)
+    }
+
+    private fun onViewEffect(viewEffect: WeatherForecastViewEffect?) {
+        viewEffect?.let {
+            when (it) {
+                WeatherForecastViewEffect.HideLoading -> applyHideLoadingState()
+                WeatherForecastViewEffect.ShowLoading -> applyShowLoadingState()
+            }
+        }
+    }
+
+    private fun applyShowLoadingState() {
+        binding.layoutLoading.globalLoadingContainer.isVisible = true
+    }
+
+    private fun applyHideLoadingState() {
+        binding.layoutLoading.globalLoadingContainer.isVisible = false
     }
 }

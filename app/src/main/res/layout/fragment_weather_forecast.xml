@@ -44,4 +44,10 @@
         app:layout_constraintTop_toBottomOf="@+id/tvLocationSubTitle"
         tools:text="53.619653, 10.079969" />
 
+    <include
+        android:id="@+id/layoutLoading"
+        layout="@layout/view_global_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
