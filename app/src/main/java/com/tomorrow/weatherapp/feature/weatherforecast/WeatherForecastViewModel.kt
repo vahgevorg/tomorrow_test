@@ -34,7 +34,8 @@ class WeatherForecastViewModel(
             .flowOnBackground()
             .onEach(::onWeatherForecastDataCollect)
             .catch {
-                // NO-OP
+                _viewEffect.value = WeatherForecastViewEffect.HideLoading
+                _viewEffect.value = WeatherForecastViewEffect.GenericError
             }
             .flowOnUIImmediate()
             .launchIn(viewModelScope)
@@ -45,7 +46,7 @@ class WeatherForecastViewModel(
         data?.let {
             _weatherForecast.postValue(it)
         } ?: run {
-           // NO-OP
+            _viewEffect.postValue(WeatherForecastViewEffect.GenericError)
         }
     }
 

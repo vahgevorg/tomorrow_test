@@ -12,4 +12,7 @@
     <string name="weather_forecast_temperature_placeholder">%1$s %2$s</string>
     <string name="weather_forecast_weather_subtitle">Weather Forecast</string>
 
+    <!-- generic -->
+    <string name="generic_error_try_again">An error occurred. Please try again.</string>
+
 </resources>

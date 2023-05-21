@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.tomorrow.weatherapp.R
@@ -109,6 +110,7 @@ class WeatherForecastFragment : BaseFragment() {
             when (it) {
                 WeatherForecastViewEffect.HideLoading -> applyHideLoadingState()
                 WeatherForecastViewEffect.ShowLoading -> applyShowLoadingState()
+                WeatherForecastViewEffect.GenericError -> applyGenericErrorState()
             }
         }
     }
@@ -131,5 +133,10 @@ class WeatherForecastFragment : BaseFragment() {
             }
             weatherForecastAdapter.submitList(weatherForecastDomainModel.weatherForecast)
         }
+    }
+
+    private fun applyGenericErrorState() {
+        Toast.makeText(requireContext(), R.string.generic_error_try_again, Toast.LENGTH_SHORT)
+            .show()
     }
 }
