@@ -7,6 +7,9 @@ plugins {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10"
+
+    // koin dependency injection
+    implementation "io.insert-koin:koin-core:3.4.0"
 }
 
 java {
