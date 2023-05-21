@@ -17,6 +17,7 @@ import com.tomorrow.weatherapp.databinding.FragmentWeatherForecastBinding
 import com.tomorrow.weatherapp.domain.model.LocationDomainModel
 import com.tomorrow.weatherapp.domain.model.WeatherForecastDomainModel
 import com.tomorrow.weatherapp.feature.base.BaseFragment
+import com.tomorrow.weatherapp.feature.weatherforecast.adapter.WeatherForecastAdapter
 import com.tomorrow.weatherapp.service.LocationService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -27,6 +28,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 @ExperimentalCoroutinesApi
 class WeatherForecastFragment : BaseFragment() {
 
+    private lateinit var weatherForecastAdapter: WeatherForecastAdapter
     private var locationUpdatesJob: Job? = null
     private var locationService: LocationService? = null
     private var isServiceBound = false
@@ -123,7 +125,11 @@ class WeatherForecastFragment : BaseFragment() {
         weatherForecastDomainModel ?: return
         binding.apply {
             tvWeatherForecastSubTitle.isVisible = true
-            // TODO: create adapter and submit list here
+            weatherForecastAdapter = WeatherForecastAdapter(weatherForecastDomainModel.weatherUnits)
+            rvWeatherForecast.apply {
+                adapter = weatherForecastAdapter
+            }
+            weatherForecastAdapter.submitList(weatherForecastDomainModel.weatherForecast)
         }
     }
 }

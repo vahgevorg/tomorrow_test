@@ -9,5 +9,7 @@
     <string name="weather_forecast_title">Weather</string>
     <string name="weather_forecast_location_subtitle">Current Location</string>
     <string name="weather_forecast_location_placeholder">%1$f, %2$f</string>
+    <string name="weather_forecast_temperature_placeholder">%1$s %2$s</string>
+    <string name="weather_forecast_weather_subtitle">Weather Forecast</string>
 
 </resources>
