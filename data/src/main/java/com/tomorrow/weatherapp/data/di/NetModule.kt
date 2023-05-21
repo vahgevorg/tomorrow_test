@@ -3,6 +3,7 @@ package com.tomorrow.weatherapp.data.di
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.tomorrow.weatherapp.core.common.Constants.API_HOST_URL
+import com.tomorrow.weatherapp.data.service.WeatherApiService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -33,4 +34,7 @@ val NET_MODULE = module {
             .client(get())
             .build()
     }
+
+    // services
+    single<WeatherApiService> { get<Retrofit>().create(WeatherApiService::class.java) }
 }
